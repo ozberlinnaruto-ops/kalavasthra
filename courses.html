@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Online Tailoring Courses | Kala Vasthra</title>
+  <meta name="description" content="Learn stitching, saree draping, and embroidery from expert instructors. Video courses with certificates. Enroll today at Kala Vasthra.">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .how-it-works { background: var(--cream-mid); }
+    .steps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; max-width: 800px; margin: 0 auto; position: relative; }
+    .steps-grid::before { content: ''; position: absolute; top: 28px; left: 16.6%; right: 16.6%; height: 1px; background: var(--border-dark); }
+    .step { text-align: center; }
+    .step-num { width: 56px; height: 56px; border-radius: 50%; background: #fff; border: 1px solid var(--border-dark); display: flex; align-items: center; justify-content: center; margin: 0 auto 18px; font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; color: var(--brown-dark); position: relative; z-index: 1; }
+    .step-title { font-size: 15px; font-weight: 500; color: var(--brown-deep); margin-bottom: 8px; }
+    .step-desc { font-size: 13px; color: var(--text-muted); line-height: 1.75; }
+
+    .courses-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px; max-width: 1050px; margin: 0 auto; }
+    .course-card { background: #fff; border: 0.5px solid var(--border-dark); border-radius: 4px; overflow: hidden; transition: transform 0.25s, box-shadow 0.25s; }
+    .course-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(61,31,10,0.1); }
+    .course-card.featured { border-color: var(--brown-mid); border-width: 1.5px; }
+    .course-thumb { height: 180px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+    .course-featured-badge { position: absolute; top: 14px; left: 14px; background: var(--brown-dark); color: var(--cream-light); font-size: 10px; font-weight: 500; padding: 5px 12px; border-radius: 2px; letter-spacing: 0.8px; }
+    .course-body { padding: 26px 28px; }
+    .course-level { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; background: var(--cream-light); color: var(--brown-mid); padding: 4px 12px; border-radius: 2px; display: inline-block; margin-bottom: 14px; font-weight: 500; border: 0.5px solid var(--cream-dark); }
+    .course-name { font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 600; color: var(--brown-deep); line-height: 1.2; margin-bottom: 12px; }
+    .course-desc { font-size: 13px; color: var(--text-muted); line-height: 1.8; margin-bottom: 20px; }
+    .course-includes { margin-bottom: 22px; }
+    .course-includes-title { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-faint); margin-bottom: 10px; font-weight: 500; }
+    .include-item { display: flex; align-items: flex-start; gap: 8px; font-size: 13px; color: var(--text-mid); margin-bottom: 7px; }
+    .include-check { color: #639922; font-size: 13px; flex-shrink: 0; margin-top: 1px; }
+    .course-footer { display: flex; align-items: center; justify-content: space-between; padding-top: 20px; border-top: 0.5px solid var(--border); flex-wrap: wrap; gap: 12px; }
+    .course-price-block {}
+    .course-price { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 600; color: var(--brown-dark); }
+    .course-price-note { font-size: 11px; color: var(--text-faint); }
+    .course-stats-row { display: flex; gap: 18px; flex-wrap: wrap; margin-bottom: 20px; }
+    .course-stat { font-size: 12px; color: var(--text-faint); }
+    .enroll-btn { background: var(--brown-dark); color: var(--cream-light); padding: 12px 28px; border: none; border-radius: 2px; font-size: 13px; font-weight: 500; cursor: pointer; letter-spacing: 0.6px; font-family: 'DM Sans', sans-serif; text-decoration: none; display: inline-block; transition: background 0.2s; }
+    .enroll-btn:hover { background: var(--brown-deep); }
+    .enroll-btn.gold { background: var(--brown-mid); }
+    .enroll-btn.gold:hover { background: var(--brown-dark); }
+
+    .guarantee { background: var(--brown-deep); padding: 60px 48px; }
+    .guarantee-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; max-width: 1000px; margin: 0 auto; }
+    .guarantee-item { text-align: center; }
+    .guarantee-icon { font-size: 28px; margin-bottom: 12px; }
+    .guarantee-title { font-size: 14px; font-weight: 500; color: var(--cream-light); margin-bottom: 6px; }
+    .guarantee-desc { font-size: 12px; color: #6b4c35; line-height: 1.7; }
+
+    .faq-section { background: var(--cream-base); }
+    .faq-list { max-width: 700px; margin: 0 auto; }
+    .faq-item { border-bottom: 0.5px solid var(--border); }
+    .faq-q { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; cursor: pointer; font-size: 15px; font-weight: 500; color: var(--brown-deep); gap: 16px; }
+    .faq-icon { font-size: 20px; color: var(--brown-mid); flex-shrink: 0; transition: transform 0.3s; }
+    .faq-a { font-size: 14px; color: var(--text-muted); line-height: 1.85; padding-bottom: 20px; display: none; }
+    .faq-item.open .faq-a { display: block; }
+    .faq-item.open .faq-icon { transform: rotate(45deg); }
+
+    @media (max-width: 900px) { .courses-grid { grid-template-columns: 1fr; max-width: 520px; } .guarantee-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 600px) { .steps-grid { grid-template-columns: 1fr; } .steps-grid::before { display: none; } .guarantee-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">Kala <span>Vasthra</span></a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="shop.html">Shop</a></li>
+    <li><a href="courses.html" class="active">Courses</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="shop.html" class="nav-cta">Shop Now</a></li>
+  </ul>
+  <div class="nav-hamburger" onclick="toggleNav()"><span></span><span></span><span></span></div>
+</nav>
+
+<div class="page-hero">
+  <span class="eyebrow">Learn & Grow</span>
+  <h1 class="page-hero-title">Master Tailoring <em>at Home</em></h1>
+  <p class="page-hero-sub">Expert-led video courses with certificates. Learn at your own pace, from anywhere in India.</p>
+</div>
+
+<!-- HOW IT WORKS -->
+<section class="section how-it-works">
+  <div class="section-header">
+    <span class="eyebrow">Simple Process</span>
+    <h2 class="section-title">How It <em>Works</em></h2>
+  </div>
+  <div class="steps-grid">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-title">Choose Your Course</div>
+      <div class="step-desc">Browse our courses and pick the one that matches your skill level and goals.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-title">Pay Securely</div>
+      <div class="step-desc">One-time payment via Razorpay. UPI, cards, net banking all accepted.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-title">Start Learning</div>
+      <div class="step-desc">Instant access to all videos. Watch on phone or laptop, anytime, anywhere.</div>
+    </div>
+  </div>
+</section>
+
+<!-- COURSES -->
+<section class="section" style="background:var(--cream-base);">
+  <div class="section-header">
+    <span class="eyebrow">All Courses</span>
+    <h2 class="section-title">Find Your <em>Perfect Course</em></h2>
+    <p class="section-sub">From beginner stitching to professional embroidery — we have a course for every level</p>
+  </div>
+  <div class="courses-grid">
+
+    <div class="course-card">
+      <div class="course-thumb" style="background:linear-gradient(160deg,#f5ede0,#e8d0b0);">
+        <svg width="160" height="160" viewBox="0 0 160 160"><path d="M60 20 Q80 12 100 20 Q112 50 108 90 Q104 118 108 148 L52 148 Q56 118 52 90 Q48 50 60 20Z" fill="#c17f3b" opacity="0.3"/><rect x="32" y="130" width="96" height="8" rx="4" fill="#c17f3b" opacity="0.55"/></svg>
+      </div>
+      <div class="course-body">
+        <span class="course-level">Beginner</span>
+        <div class="course-name">Beginner Stitching Masterclass</div>
+        <p class="course-desc">Learn to stitch a complete salwar kameez from scratch. Perfect for anyone who has never stitched before — from taking measurements to professional finishing.</p>
+        <div class="course-stats-row">
+          <span class="course-stat">📹 12 HD lessons</span>
+          <span class="course-stat">⏱ 6 hours</span>
+          <span class="course-stat">🎓 Certificate</span>
+        </div>
+        <div class="course-includes">
+          <div class="course-includes-title">What's Included</div>
+          <div class="include-item"><span class="include-check">✓</span> Understanding fabric types and cutting</div>
+          <div class="include-item"><span class="include-check">✓</span> Taking accurate body measurements</div>
+          <div class="include-item"><span class="include-check">✓</span> Stitching salwar, kameez & churidar</div>
+          <div class="include-item"><span class="include-check">✓</span> Downloadable measurement charts</div>
+          <div class="include-item"><span class="include-check">✓</span> WhatsApp group support</div>
+          <div class="include-item"><span class="include-check">✓</span> Certificate of completion</div>
+        </div>
+        <div class="course-footer">
+          <div class="course-price-block">
+            <div class="course-price">₹999</div>
+            <div class="course-price-note">One-time payment · Lifetime access</div>
+          </div>
+          <a href="contact.html" class="enroll-btn">Enroll Now</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="course-card featured">
+      <div class="course-thumb" style="background:linear-gradient(160deg,#fde8e8,#f5c8c0);">
+        <span class="course-featured-badge">Most Popular</span>
+        <svg width="160" height="160" viewBox="0 0 160 160"><path d="M28 44 Q80 16 132 44 Q114 100 80 144 Q46 100 28 44Z" fill="#D4537E" opacity="0.25"/><path d="M40 55 Q80 30 120 55" fill="none" stroke="#D4537E" stroke-width="1.5" opacity="0.4"/></svg>
+      </div>
+      <div class="course-body">
+        <span class="course-level">All Levels</span>
+        <div class="course-name">Saree Draping — All 15 Styles</div>
+        <p class="course-desc">Master every regional saree draping style from Nivi to Gujarati. Taught by a styling expert with 20+ years of experience in bridal and festive occasions.</p>
+        <div class="course-stats-row">
+          <span class="course-stat">📹 15 HD lessons</span>
+          <span class="course-stat">⏱ 4 hours</span>
+          <span class="course-stat">🎓 Certificate</span>
+        </div>
+        <div class="course-includes">
+          <div class="course-includes-title">What's Included</div>
+          <div class="include-item"><span class="include-check">✓</span> 15 different regional draping styles</div>
+          <div class="include-item"><span class="include-check">✓</span> Tips for all body types</div>
+          <div class="include-item"><span class="include-check">✓</span> Petticoat & blouse selection guide</div>
+          <div class="include-item"><span class="include-check">✓</span> Style cheat sheet PDF (downloadable)</div>
+          <div class="include-item"><span class="include-check">✓</span> Certificate of completion</div>
+        </div>
+        <div class="course-footer">
+          <div class="course-price-block">
+            <div class="course-price">₹599</div>
+            <div class="course-price-note">One-time payment · Lifetime access</div>
+          </div>
+          <a href="contact.html" class="enroll-btn gold">Enroll Now</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="course-card">
+      <div class="course-thumb" style="background:linear-gradient(160deg,#f0e8f5,#ddd0ee);">
+        <svg width="160" height="160" viewBox="0 0 160 160"><circle cx="80" cy="80" r="50" fill="none" stroke="#7F77DD" stroke-width="1.5" opacity="0.35"/><circle cx="80" cy="80" r="34" fill="none" stroke="#7F77DD" stroke-width="1" opacity="0.3"/><circle cx="80" cy="80" r="8" fill="#7F77DD" opacity="0.4"/></svg>
+      </div>
+      <div class="course-body">
+        <span class="course-level">Advanced</span>
+        <div class="course-name">Zardozi & Aari Embroidery</div>
+        <p class="course-desc">Professional embroidery techniques used by top designers showcased at fashion weeks. Learn Zardozi goldwork, Aari chain stitch, beads, and sequins.</p>
+        <div class="course-stats-row">
+          <span class="course-stat">📹 20 HD lessons</span>
+          <span class="course-stat">⏱ 10 hours</span>
+          <span class="course-stat">🎓 Certificate</span>
+        </div>
+        <div class="course-includes">
+          <div class="course-includes-title">What's Included</div>
+          <div class="include-item"><span class="include-check">✓</span> Zardozi goldwork embroidery</div>
+          <div class="include-item"><span class="include-check">✓</span> Aari chain stitch on fabric</div>
+          <div class="include-item"><span class="include-check">✓</span> Bead and sequin attachment</div>
+          <div class="include-item"><span class="include-check">✓</span> Material sourcing guide PDF</div>
+          <div class="include-item"><span class="include-check">✓</span> Monthly live doubt-clearing session</div>
+          <div class="include-item"><span class="include-check">✓</span> Certificate of completion</div>
+        </div>
+        <div class="course-footer">
+          <div class="course-price-block">
+            <div class="course-price">₹1,499</div>
+            <div class="course-price-note">One-time payment · Lifetime access</div>
+          </div>
+          <a href="contact.html" class="enroll-btn">Enroll Now</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="course-card">
+      <div class="course-thumb" style="background:linear-gradient(160deg,#eef5e8,#d8eecc);">
+        <svg width="160" height="160" viewBox="0 0 160 160"><rect x="50" y="18" width="60" height="72" rx="8" fill="#639922" opacity="0.28"/><rect x="58" y="94" width="44" height="48" rx="6" fill="#639922" opacity="0.2"/></svg>
+      </div>
+      <div class="course-body">
+        <span class="course-level">Intermediate</span>
+        <div class="course-name">Kids Wear Stitching</div>
+        <p class="course-desc">Design and stitch adorable outfits for children — frocks, kurtas, and pavadais. Learn size grading for ages 2–12 years with professional finishing techniques.</p>
+        <div class="course-stats-row">
+          <span class="course-stat">📹 10 HD lessons</span>
+          <span class="course-stat">⏱ 5 hours</span>
+          <span class="course-stat">🎓 Certificate</span>
+        </div>
+        <div class="course-includes">
+          <div class="course-includes-title">What's Included</div>
+          <div class="include-item"><span class="include-check">✓</span> Kids size charts for ages 2–12</div>
+          <div class="include-item"><span class="include-check">✓</span> Frocks, kurtas & pavadai patterns</div>
+          <div class="include-item"><span class="include-check">✓</span> Smocking & decorative finishing</div>
+          <div class="include-item"><span class="include-check">✓</span> WhatsApp group support</div>
+          <div class="include-item"><span class="include-check">✓</span> Certificate of completion</div>
+        </div>
+        <div class="course-footer">
+          <div class="course-price-block">
+            <div class="course-price">₹799</div>
+            <div class="course-price-note">One-time payment · Lifetime access</div>
+          </div>
+          <a href="contact.html" class="enroll-btn">Enroll Now</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- GUARANTEE -->
+<section class="section guarantee">
+  <div class="section-header">
+    <span class="eyebrow" style="color:var(--brown-mid);">Our Promise</span>
+    <h2 class="section-title" style="color:var(--cream-light);">Why Learn With <em>Us?</em></h2>
+  </div>
+  <div class="guarantee-grid">
+    <div class="guarantee-item">
+      <div class="guarantee-icon">🎓</div>
+      <div class="guarantee-title">Certificates</div>
+      <div class="guarantee-desc">Receive a certificate on every course you complete, recognised by employers and clients.</div>
+    </div>
+    <div class="guarantee-item">
+      <div class="guarantee-icon">📱</div>
+      <div class="guarantee-title">Learn Anywhere</div>
+      <div class="guarantee-desc">HD video lessons accessible on any device — phone, tablet, or laptop.</div>
+    </div>
+    <div class="guarantee-item">
+      <div class="guarantee-icon">💬</div>
+      <div class="guarantee-title">WhatsApp Support</div>
+      <div class="guarantee-desc">Dedicated WhatsApp group with instructors for every course. Ask doubts anytime.</div>
+    </div>
+    <div class="guarantee-item">
+      <div class="guarantee-icon">♾️</div>
+      <div class="guarantee-title">Lifetime Access</div>
+      <div class="guarantee-desc">Pay once and access your course forever. Rewatch lessons as many times as you need.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section faq-section">
+  <div class="section-header">
+    <span class="eyebrow">Questions</span>
+    <h2 class="section-title">Course <em>FAQs</em></h2>
+  </div>
+  <div class="faq-list">
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">Is the beginner course suitable for absolute beginners? <span class="faq-icon">+</span></div>
+      <div class="faq-a">Yes! The beginner course is designed for people who have never stitched before. We start from the very basics — understanding fabrics, using a needle and thread — all the way to completing a full garment.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">How do I access the course after payment? <span class="faq-icon">+</span></div>
+      <div class="faq-a">Immediately after your payment is confirmed, you'll receive a login link on your registered WhatsApp/email. Click the link and you'll have instant access to all video lessons.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">What materials do I need for the stitching courses? <span class="faq-icon">+</span></div>
+      <div class="faq-a">A basic sewing machine, fabric, measuring tape, scissors, needles, and thread. A complete materials list is shared before the course begins. Most items are available at any local fabric shop.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">Is there a refund if I'm not satisfied? <span class="faq-icon">+</span></div>
+      <div class="faq-a">We offer a 7-day refund if you've watched less than 20% of the course content. Contact us on WhatsApp and we'll process your refund within 3–5 business days.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">Are the courses in Tamil or English? <span class="faq-icon">+</span></div>
+      <div class="faq-a">Our courses are taught in Tamil with English subtitles available. This makes them accessible to students across India.</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-top">
+    <div><span class="footer-brand">Kala Vasthra</span><p class="footer-desc">Authentic Indian clothing & expert tailoring courses. Delivered with love.</p></div>
+    <div><div class="footer-col-title">Shop</div><a href="shop.html" class="footer-link">All Products</a><a href="shop.html" class="footer-link">Sarees</a><a href="shop.html" class="footer-link">Dress Materials</a></div>
+    <div><div class="footer-col-title">Learn</div><a href="courses.html" class="footer-link">All Courses</a><a href="courses.html" class="footer-link">Beginner</a><a href="courses.html" class="footer-link">Advanced</a></div>
+    <div><div class="footer-col-title">Help</div><a href="contact.html" class="footer-link">WhatsApp Us</a><a href="contact.html" class="footer-link">Returns</a><a href="about.html" class="footer-link">About Us</a></div>
+  </div>
+  <div class="footer-bottom"><span>© 2025 Kala Vasthra. All rights reserved.</span><span>Chennai, Tamil Nadu, India</span></div>
+</footer>
+
+<a class="wa-float" href="https://wa.me/91XXXXXXXXXX" target="_blank">
+  <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+<script>
+function toggleNav() { document.getElementById('navLinks').classList.toggle('open'); }
+function toggleFaq(el) { el.parentElement.classList.toggle('open'); }
+</script>
+</body>
+</html>
