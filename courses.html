@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Online Tailoring Courses | Kala Vasthra</title>
+  <meta name="description" content="Learn stitching, saree draping, and embroidery. Pay securely via Razorpay. Certificates included. Enroll today at Kala Vasthra.">
+  <link rel="stylesheet" href="style.css">
+  <!-- Razorpay Checkout SDK -->
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <style>
+    /* HOW IT WORKS */
+    .how-section { background: var(--cream-mid); }
+    .steps-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 32px; max-width: 800px; margin: 0 auto; position: relative; }
+    .steps-grid::before { content:''; position:absolute; top:27px; left:16%; right:16%; height:1px; background:var(--border-dark); }
+    .step { text-align: center; }
+    .step-num { width:54px; height:54px; border-radius:50%; background:#fff; border:1px solid var(--border-dark); display:flex; align-items:center; justify-content:center; margin:0 auto 16px; font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:600; color:var(--brown-dark); position:relative; z-index:1; }
+    .step-title { font-size:14px; font-weight:500; color:var(--brown-deep); margin-bottom:6px; }
+    .step-desc { font-size:12px; color:var(--text-muted); line-height:1.7; }
+
+    /* COURSES */
+    .courses-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:28px; max-width:1050px; margin:0 auto; }
+    .course-card { background:#fff; border:0.5px solid var(--border-dark); border-radius:4px; overflow:hidden; transition:transform 0.25s,box-shadow 0.25s; }
+    .course-card:hover { transform:translateY(-4px); box-shadow:0 16px 40px rgba(61,31,10,0.1); }
+    .course-card.popular { border-color:var(--brown-mid); border-width:1.5px; }
+    .course-thumb { height:160px; display:flex; align-items:center; justify-content:center; position:relative; }
+    .popular-badge { position:absolute; top:14px; left:14px; background:var(--brown-dark); color:var(--cream-light); font-size:10px; font-weight:500; padding:4px 12px; border-radius:2px; letter-spacing:0.8px; }
+    .course-body { padding:24px 26px; }
+    .course-level { font-size:10px; letter-spacing:2px; text-transform:uppercase; background:var(--cream-light); color:var(--brown-mid); padding:4px 12px; border-radius:2px; display:inline-block; margin-bottom:12px; font-weight:500; border:0.5px solid var(--cream-dark); }
+    .course-name { font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:600; color:var(--brown-deep); line-height:1.2; margin-bottom:10px; }
+    .course-desc { font-size:13px; color:var(--text-muted); line-height:1.8; margin-bottom:18px; }
+    .course-includes { margin-bottom:20px; }
+    .course-includes-title { font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:var(--text-faint); margin-bottom:8px; font-weight:500; }
+    .include-item { display:flex; align-items:flex-start; gap:8px; font-size:13px; color:var(--text-mid); margin-bottom:6px; }
+    .check { color:#3B6D11; font-size:12px; flex-shrink:0; margin-top:2px; }
+    .course-divider { height:0.5px; background:var(--border); margin:18px 0; }
+    .course-footer { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; }
+    .course-price { font-family:'Cormorant Garamond',serif; font-size:30px; font-weight:600; color:var(--brown-dark); }
+    .course-price-note { font-size:11px; color:var(--text-faint); }
+
+    /* PAY BUTTON */
+    .pay-btn {
+      background: var(--brown-dark);
+      color: var(--cream-light);
+      padding: 13px 28px;
+      border: none;
+      border-radius: 2px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      letter-spacing: 0.6px;
+      font-family: 'DM Sans', sans-serif;
+      transition: background 0.2s, transform 0.15s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .pay-btn:hover { background: var(--brown-deep); transform: translateY(-1px); }
+    .pay-btn.gold { background: var(--brown-mid); }
+    .pay-btn.gold:hover { background: var(--brown-dark); }
+    .razorpay-note { font-size:11px; color:var(--text-faint); display:flex; align-items:center; gap:5px; margin-top:8px; }
+
+    /* PAYMENT MODAL */
+    .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:9999; align-items:center; justify-content:center; }
+    .modal-overlay.open { display:flex; }
+    .modal { background:#fff; border-radius:4px; padding:32px; max-width:420px; width:90%; position:relative; }
+    .modal-close { position:absolute; top:14px; right:18px; font-size:22px; cursor:pointer; color:var(--text-faint); background:none; border:none; }
+    .modal-title { font-family:'Cormorant Garamond',serif; font-size:24px; font-weight:600; color:var(--brown-deep); margin-bottom:6px; }
+    .modal-sub { font-size:13px; color:var(--text-muted); margin-bottom:22px; }
+    .modal-form .form-group { margin-bottom:16px; }
+    .modal-form label { display:block; font-size:12px; font-weight:500; color:var(--text-mid); margin-bottom:6px; }
+    .modal-form input { width:100%; padding:10px 13px; border:0.5px solid var(--border-dark); border-radius:2px; font-size:14px; font-family:'DM Sans',sans-serif; color:var(--text-dark); background:var(--cream-base); outline:none; transition:border-color 0.2s; }
+    .modal-form input:focus { border-color:var(--brown-mid); background:#fff; }
+    .modal-pay-btn { width:100%; padding:14px; background:var(--brown-dark); color:var(--cream-light); border:none; border-radius:2px; font-size:14px; font-weight:500; cursor:pointer; font-family:'DM Sans',sans-serif; transition:background 0.2s; margin-top:4px; display:flex; align-items:center; justify-content:center; gap:10px; }
+    .modal-pay-btn:hover { background:var(--brown-deep); }
+    .modal-secure { text-align:center; font-size:11px; color:var(--text-faint); margin-top:12px; }
+    .razorpay-logo { display:inline-flex; align-items:center; gap:4px; font-weight:500; color:#3395FF; }
+
+    /* SETUP NOTICE */
+    .setup-notice { background:#fff8e1; border:0.5px solid #ffe082; border-radius:4px; padding:14px 18px; margin:20px auto; max-width:700px; font-size:13px; color:#e65100; display:flex; gap:12px; align-items:flex-start; }
+
+    /* GUARANTEE */
+    .guarantee { background:var(--brown-deep); }
+    .guarantee-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:24px; max-width:1000px; margin:0 auto; text-align:center; }
+    .guarantee-icon { font-size:26px; margin-bottom:10px; }
+    .guarantee-title { font-size:14px; font-weight:500; color:var(--cream-light); margin-bottom:6px; }
+    .guarantee-desc { font-size:12px; color:#6b4c35; line-height:1.7; }
+
+    /* FAQ */
+    .faq-list { max-width:700px; margin:0 auto; }
+    .faq-item { border-bottom:0.5px solid var(--border); }
+    .faq-q { display:flex; justify-content:space-between; align-items:center; padding:18px 0; cursor:pointer; font-size:14px; font-weight:500; color:var(--brown-deep); gap:16px; }
+    .faq-icon { font-size:20px; color:var(--brown-mid); flex-shrink:0; transition:transform 0.3s; }
+    .faq-a { font-size:13px; color:var(--text-muted); line-height:1.85; padding-bottom:18px; display:none; }
+    .faq-item.open .faq-a { display:block; }
+    .faq-item.open .faq-icon { transform:rotate(45deg); }
+
+    @media (max-width:900px) { .courses-grid { grid-template-columns:1fr; max-width:520px; } .guarantee-grid { grid-template-columns:1fr 1fr; } }
+    @media (max-width:600px) { .steps-grid { grid-template-columns:1fr; } .steps-grid::before { display:none; } .guarantee-grid { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">Kala <span>Vasthra</span></a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="shop.html">Shop</a></li>
+    <li><a href="courses.html" class="active">Courses</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="shop.html" class="nav-cta">Shop Now</a></li>
+  </ul>
+  <div class="nav-hamburger" onclick="toggleNav()"><span></span><span></span><span></span></div>
+</nav>
+
+<div class="page-hero">
+  <span class="eyebrow">Learn & Earn</span>
+  <h1 class="page-hero-title">Master Tailoring <em>at Home</em></h1>
+  <p class="page-hero-sub">Expert-led video courses. Pay securely via UPI, card or net banking. Get certified instantly.</p>
+</div>
+
+<!-- RAZORPAY SETUP NOTICE — Remove this once you add your API key -->
+<div class="setup-notice" id="setupNotice">
+  <span style="font-size:18px;flex-shrink:0;">⚠️</span>
+  <span><strong>For website owner:</strong> Replace <code>YOUR_RAZORPAY_KEY_ID</code> in this page with your actual Razorpay Key ID to activate payments. See the setup guide below.</span>
+</div>
+
+<!-- HOW IT WORKS -->
+<section class="section how-section">
+  <div class="section-header">
+    <span class="eyebrow">Simple Process</span>
+    <h2 class="section-title">How It <em>Works</em></h2>
+  </div>
+  <div class="steps-grid">
+    <div class="step"><div class="step-num">1</div><div class="step-title">Choose a course</div><div class="step-desc">Browse and pick the course matching your skill level.</div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-title">Pay securely</div><div class="step-desc">UPI, debit/credit card, or net banking via Razorpay.</div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-title">Start learning</div><div class="step-desc">Instant access. Watch on phone or laptop, anytime.</div></div>
+  </div>
+</section>
+
+<!-- COURSES -->
+<section class="section" style="background:var(--cream-base);">
+  <div class="section-header">
+    <span class="eyebrow">All Courses</span>
+    <h2 class="section-title">Find Your <em>Perfect Course</em></h2>
+    <p class="section-sub">From beginner stitching to professional embroidery — we have a course for every level</p>
+  </div>
+  <div class="courses-grid">
+
+    <!-- COURSE 1 -->
+    <div class="course-card">
+      <div class="course-thumb" style="background:linear-gradient(160deg,#f5ede0,#e8d0b0);">
+        <svg width="160" height="155" viewBox="0 0 160 155"><path d="M58 18 Q80 10 102 18 Q114 48 108 90 Q104 118 108 148 L52 148 Q56 118 52 90 Q46 48 58 18Z" fill="#c17f3b" opacity="0.28"/><rect x="32" y="132" width="96" height="9" rx="4.5" fill="#c17f3b" opacity="0.55"/></svg>
+      </div>
+      <div class="course-body">
+        <span class="course-level">Beginner</span>
+        <div class="course-name">Beginner Stitching Masterclass</div>
+        <p class="course-desc">Learn to stitch a complete salwar kameez from scratch — measuring, cutting, and professional finishing.</p>
+        <div class="course-includes">
+          <div class="course-includes-title">What's Included</div>
+          <div class="include-item"><span class="check">✓</span> 12 HD video lessons (6 hours)</div>
+          <div class="include-item"><span class="check">✓</span> Downloadable measurement charts</div>
+          <div class="include-item"><span class="check">✓</span> WhatsApp group support</div>
+          <div class="include-item"><span class="check">✓</span> Certificate of completion</div>
+          <div class="include-item"><span class="check">✓</span> Lifetime access</div>
+        </div>
+        <div class="course-divider"></div>
+        <div class="course-footer">
+          <div>
+            <div class="course-price">₹999</div>
+            <div class="course-price-note">One-time · Lifetime access</div>
+          </div>
+          <div>
+            <button class="pay-btn" onclick="openPayment('Beginner Stitching Masterclass', 999)">
+              🔒 Enroll & Pay
+            </button>
+            <div class="razorpay-note">🔒 Secured by Razorpay</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- COURSE 2 -->
+    <div class="course-card popular">
+      <div class="course-thumb" style="background:linear-gradient(160deg,#fde8e8,#f5c8c0);">
+        <span class="popular-badge">Most Popular</span>
+        <svg width="160" height="155" viewBox="0 0 160 155"><path d="M28 44 Q80 16 132 44 Q114 100 80 144 Q46 100 28 44Z" fill="#D4537E" opacity="0.22"/><path d="M40 55 Q80 30 120 55" fill="none" stroke="#D4537E" stroke-width="1.5" opacity="0.4"/></svg>
+      </div>
+      <div class="course-body">
+        <span class="course-level">All Levels</span>
+        <div class="course-name">Saree Draping — All 15 Styles</div>
+        <p class="course-desc">Master every regional saree draping style from Nivi to Gujarati. Taught by a styling expert with 20+ years experience.</p>
+        <div class="course-includes">
+          <div class="course-includes-title">What's Included</div>
+          <div class="include-item"><span class="check">✓</span> 15 HD video lessons (4 hours)</div>
+          <div class="include-item"><span class="check">✓</span> Style cheat sheet PDF</div>
+          <div class="include-item"><span class="check">✓</span> Tips for all body types</div>
+          <div class="include-item"><span class="check">✓</span> Certificate of completion</div>
+          <div class="include-item"><span class="check">✓</span> Lifetime access</div>
+        </div>
+        <div class="course-divider"></div>
+        <div class="course-footer">
+          <div>
+            <div class="course-price">₹599</div>
+            <div class="course-price-note">One-time · Lifetime access</div>
+          </div>
+          <div>
+            <button class="pay-btn gold" onclick="openPayment('Saree Draping — All 15 Styles', 599)">
+              🔒 Enroll & Pay
+            </button>
+            <div class="razorpay-note">🔒 Secured by Razorpay</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- COURSE 3 -->
+    <div class="course-card">
+      <div class="course-thumb" style="background:linear-gradient(160deg,#f0e8f5,#ddd0ee);">
+        <svg width="160" height="155" viewBox="0 0 160 155"><circle cx="80" cy="78" r="48" fill="none" stroke="#7F77DD" stroke-width="1.5" opacity="0.35"/><circle cx="80" cy="78" r="32" fill="none" stroke="#7F77DD" stroke-width="1" opacity="0.3"/><circle cx="80" cy="78" r="8" fill="#7F77DD" opacity="0.4"/></svg>
+      </div>
+      <div class="course-body">
+        <span class="course-level">Advanced</span>
+        <div class="course-name">Zardozi & Aari Embroidery</div>
+        <p class="course-desc">Professional embroidery techniques used by top designers. Zardozi goldwork, Aari chain stitch, beads, and sequins.</p>
+        <div class="course-includes">
+          <div class="course-includes-title">What's Included</div>
+          <div class="include-item"><span class="check">✓</span> 20 HD video lessons (10 hours)</div>
+          <div class="include-item"><span class="check">✓</span> Material sourcing guide PDF</div>
+          <div class="include-item"><span class="check">✓</span> Monthly live doubt session</div>
+          <div class="include-item"><span class="check">✓</span> Certificate of completion</div>
+          <div class="include-item"><span class="check">✓</span> Lifetime access</div>
+        </div>
+        <div class="course-divider"></div>
+        <div class="course-footer">
+          <div>
+            <div class="course-price">₹1,499</div>
+            <div class="course-price-note">One-time · Lifetime access</div>
+          </div>
+          <div>
+            <button class="pay-btn" onclick="openPayment('Zardozi & Aari Embroidery', 1499)">
+              🔒 Enroll & Pay
+            </button>
+            <div class="razorpay-note">🔒 Secured by Razorpay</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- COURSE 4 -->
+    <div class="course-card">
+      <div class="course-thumb" style="background:linear-gradient(160deg,#eef5e8,#d8eecc);">
+        <svg width="160" height="155" viewBox="0 0 160 155"><rect x="50" y="18" width="60" height="70" rx="8" fill="#639922" opacity="0.26"/><rect x="58" y="92" width="44" height="50" rx="6" fill="#639922" opacity="0.2"/></svg>
+      </div>
+      <div class="course-body">
+        <span class="course-level">Intermediate</span>
+        <div class="course-name">Kids Wear Stitching</div>
+        <p class="course-desc">Design and stitch frocks, kurtas, and pavadais for children. Learn size grading for ages 2–12 years.</p>
+        <div class="course-includes">
+          <div class="course-includes-title">What's Included</div>
+          <div class="include-item"><span class="check">✓</span> 10 HD video lessons (5 hours)</div>
+          <div class="include-item"><span class="check">✓</span> Kids size charts (ages 2–12)</div>
+          <div class="include-item"><span class="check">✓</span> WhatsApp group support</div>
+          <div class="include-item"><span class="check">✓</span> Certificate of completion</div>
+          <div class="include-item"><span class="check">✓</span> Lifetime access</div>
+        </div>
+        <div class="course-divider"></div>
+        <div class="course-footer">
+          <div>
+            <div class="course-price">₹799</div>
+            <div class="course-price-note">One-time · Lifetime access</div>
+          </div>
+          <div>
+            <button class="pay-btn" onclick="openPayment('Kids Wear Stitching', 799)">
+              🔒 Enroll & Pay
+            </button>
+            <div class="razorpay-note">🔒 Secured by Razorpay</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- GUARANTEE -->
+<section class="section guarantee">
+  <div class="section-header">
+    <span class="eyebrow" style="color:var(--brown-mid);">Our Promise</span>
+    <h2 class="section-title" style="color:var(--cream-light);">Why Learn With <em>Us?</em></h2>
+  </div>
+  <div class="guarantee-grid">
+    <div><div class="guarantee-icon">🔒</div><div class="guarantee-title">Secure Payments</div><div class="guarantee-desc">All payments via Razorpay — UPI, cards, net banking. 100% safe and encrypted.</div></div>
+    <div><div class="guarantee-icon">📱</div><div class="guarantee-title">Learn Anywhere</div><div class="guarantee-desc">HD videos on any device — phone, tablet, or laptop. No expiry.</div></div>
+    <div><div class="guarantee-icon">💬</div><div class="guarantee-title">WhatsApp Support</div><div class="guarantee-desc">Dedicated group for every course. Ask doubts anytime, get answers fast.</div></div>
+    <div><div class="guarantee-icon">🎓</div><div class="guarantee-title">Certificates</div><div class="guarantee-desc">Receive a certificate on completion. Recognised by employers and clients.</div></div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section" style="background:var(--cream-base);">
+  <div class="section-header">
+    <span class="eyebrow">Questions</span>
+    <h2 class="section-title">Course <em>FAQs</em></h2>
+  </div>
+  <div class="faq-list">
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">What payment methods are accepted? <span class="faq-icon">+</span></div>
+      <div class="faq-a">We accept all UPI apps (GPay, PhonePe, Paytm), debit cards, credit cards, and net banking — all via Razorpay. Payments are 100% safe and encrypted.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">How do I access the course after payment? <span class="faq-icon">+</span></div>
+      <div class="faq-a">Immediately after your payment is confirmed, you'll receive a login link on your registered WhatsApp/email. Click to access all video lessons instantly.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">Is there a refund if I'm not satisfied? <span class="faq-icon">+</span></div>
+      <div class="faq-a">Yes — 7-day refund if you've watched less than 20% of the course. Contact us on WhatsApp and we'll process within 3–5 business days.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">Are the courses in Tamil or English? <span class="faq-icon">+</span></div>
+      <div class="faq-a">Courses are taught in Tamil with English subtitles available — accessible to students across India.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">Can I access the course on my phone? <span class="faq-icon">+</span></div>
+      <div class="faq-a">Yes! All courses are fully mobile-friendly. Watch on your phone, tablet, or laptop — anytime, anywhere, with lifetime access.</div>
+    </div>
+  </div>
+</section>
+
+<!-- PAYMENT MODAL -->
+<div class="modal-overlay" id="paymentModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">×</button>
+    <div class="modal-title" id="modalCourseName">Course Name</div>
+    <div class="modal-sub">Enter your details to complete enrollment</div>
+    <div class="modal-form">
+      <div class="form-group">
+        <label>Your Full Name *</label>
+        <input type="text" id="userName" placeholder="Priya Sharma" required>
+      </div>
+      <div class="form-group">
+        <label>WhatsApp Number *</label>
+        <input type="tel" id="userPhone" placeholder="+91 98765 43210" required>
+      </div>
+      <div class="form-group">
+        <label>Email Address *</label>
+        <input type="email" id="userEmail" placeholder="you@example.com" required>
+      </div>
+      <button class="modal-pay-btn" id="payNowBtn" onclick="initiatePayment()">
+        🔒 Pay <span id="modalAmount">₹999</span> Securely
+      </button>
+      <div class="modal-secure">Payments secured by <span class="razorpay-logo">⚡ Razorpay</span> · UPI · Cards · Net Banking</div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-top">
+    <div><span class="footer-brand">Kala Vasthra</span><p class="footer-desc">Authentic Indian clothing & expert tailoring courses. Delivered with love.</p></div>
+    <div><div class="footer-col-title">Shop</div><a href="shop.html" class="footer-link">Painted Sarees</a><a href="shop.html" class="footer-link">Painted Blouses</a><a href="shop.html" class="footer-link">Saree Sets</a></div>
+    <div><div class="footer-col-title">Learn</div><a href="courses.html" class="footer-link">All Courses</a><a href="courses.html" class="footer-link">Beginner</a><a href="courses.html" class="footer-link">Advanced</a></div>
+    <div><div class="footer-col-title">Help</div><a href="contact.html" class="footer-link">WhatsApp Us</a><a href="contact.html" class="footer-link">Returns</a><a href="about.html" class="footer-link">About Us</a></div>
+  </div>
+  <div class="footer-bottom"><span>© 2025 Kala Vasthra. All rights reserved.</span><span>Chennai, Tamil Nadu, India</span></div>
+</footer>
+
+<a class="wa-float" href="https://wa.me/91XXXXXXXXXX" target="_blank">
+  <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+<script>
+// ============================================================
+// RAZORPAY CONFIGURATION
+// STEP 1: Replace YOUR_RAZORPAY_KEY_ID with your actual Key ID
+// Get it from: https://dashboard.razorpay.com → Settings → API Keys
+// ============================================================
+const RAZORPAY_KEY_ID = 'YOUR_RAZORPAY_KEY_ID';
+
+let currentCourse = { name: '', price: 0 };
+
+function toggleNav(){ document.getElementById('navLinks').classList.toggle('open'); }
+function toggleFaq(el){ el.parentElement.classList.toggle('open'); }
+
+function openPayment(courseName, price) {
+  currentCourse = { name: courseName, price: price };
+  document.getElementById('modalCourseName').textContent = courseName;
+  document.getElementById('modalAmount').textContent = '₹' + price.toLocaleString('en-IN');
+  document.getElementById('userName').value = '';
+  document.getElementById('userPhone').value = '';
+  document.getElementById('userEmail').value = '';
+  document.getElementById('paymentModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('paymentModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function initiatePayment() {
+  const name = document.getElementById('userName').value.trim();
+  const phone = document.getElementById('userPhone').value.trim();
+  const email = document.getElementById('userEmail').value.trim();
+
+  if (!name || !phone || !email) {
+    alert('Please fill in all fields to proceed.');
+    return;
+  }
+
+  // Check if Razorpay key is configured
+  if (RAZORPAY_KEY_ID === 'YOUR_RAZORPAY_KEY_ID') {
+    alert('Payment gateway not yet configured.\n\nPlease contact us on WhatsApp to enroll:\n+91 XXXXXXXXXX');
+    closeModal();
+    window.open('https://wa.me/91XXXXXXXXXX?text=Hi! I want to enroll in: ' + encodeURIComponent(currentCourse.name), '_blank');
+    return;
+  }
+
+  const options = {
+    key: RAZORPAY_KEY_ID,
+    amount: currentCourse.price * 100, // Amount in paise
+    currency: 'INR',
+    name: 'Kala Vasthra',
+    description: currentCourse.name,
+    image: '', // Add your logo URL here
+    handler: function(response) {
+      // Payment successful
+      closeModal();
+      alert('🎉 Payment successful!\nPayment ID: ' + response.razorpay_payment_id + '\n\nYou will receive your course access link on WhatsApp within 10 minutes.\n\nThank you for enrolling!');
+      // Send confirmation WhatsApp
+      const msg = encodeURIComponent('Hi! I have successfully enrolled in ' + currentCourse.name + '. Payment ID: ' + response.razorpay_payment_id);
+      window.open('https://wa.me/91XXXXXXXXXX?text=' + msg, '_blank');
+    },
+    prefill: {
+      name: name,
+      email: email,
+      contact: phone
+    },
+    notes: {
+      course_name: currentCourse.name
+    },
+    theme: {
+      color: '#7a3b19'
+    },
+    modal: {
+      ondismiss: function() {
+        console.log('Payment cancelled by user');
+      }
+    }
+  };
+
+  const rzp = new Razorpay(options);
+  rzp.on('payment.failed', function(response) {
+    alert('Payment failed. Please try again or contact us on WhatsApp.\nError: ' + response.error.description);
+  });
+  rzp.open();
+  closeModal();
+}
+
+// Close modal on overlay click
+document.getElementById('paymentModal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+</script>
+</body>
+</html>
