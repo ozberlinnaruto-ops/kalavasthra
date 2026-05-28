@@ -221,6 +221,12 @@ footer {
   position: relative;
   overflow: hidden;
 }
+.hero-img{
+    width: 100%;
+    max-width: 460px;
+    border-radius: 20px;
+    object-fit: cover;
+}
 .page-hero::before {
   content: '';
   position: absolute;
