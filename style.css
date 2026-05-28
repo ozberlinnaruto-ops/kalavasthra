@@ -224,6 +224,7 @@ footer {
 .hero-img{
     width: 100%;
     max-width: 460px;
+    max-height: 520px;
     border-radius: 20px;
     object-fit: cover;
 }
