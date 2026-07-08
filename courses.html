@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Courses | Kalavasthras – Learn Fabric Painting</title>
+<meta name="description" content="Learn Tanjore fabric painting and hand-painted saree art with online live classes. Beginner to advanced courses with certificate.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,400;1,700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --brown:     #3B1A08;
+    --brown-md:  #5C2A10;
+    --brown-lt:  #8B4020;
+    --gold:      #C8922A;
+    --gold-lt:   #F5DFA0;
+    --bg:        #FAF6F0;
+    --card:      #FFFFFF;
+    --border:    #E8DDD0;
+    --text:      #1A1206;
+    --muted:     #7A6040;
+    --green:     #2E7D32;
+    --teal:      #1B6B5A;
+    --wa:        #25D366;
+    --rp:        #3B1A08;   /* Razorpay CTA uses brand brown */
+    --popular-border: #C8922A;
+  }
+
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ── NAV ── */
+  nav {
+    background: #fff;
+    border-bottom: 1px solid var(--border);
+    padding: 0 5%;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 64px;
+    position: sticky; top: 0; z-index: 100;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+  }
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.35rem; font-weight: 700;
+    color: var(--brown); text-decoration: none;
+  }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    font-size: 0.875rem; font-weight: 500;
+    color: var(--muted); text-decoration: none; transition: color 0.2s;
+  }
+  .nav-links a:hover, .nav-links a.active { color: var(--brown); }
+  .nav-cta {
+    background: var(--brown); color: #fff !important;
+    padding: 0.48rem 1.2rem; border-radius: 4px;
+    font-size: 0.85rem !important; transition: background 0.2s !important;
+  }
+  .nav-cta:hover { background: var(--brown-md) !important; }
+  .hamburger {
+    display: none; flex-direction: column; gap: 5px;
+    cursor: pointer; background: none; border: none;
+  }
+  .hamburger span { display: block; width: 22px; height: 2px; background: var(--brown); border-radius: 2px; }
+
+  /* ── HERO ── */
+  .hero {
+    background: linear-gradient(135deg, var(--brown) 0%, #5C2A10 55%, #7A4018 100%);
+    padding: 3.5rem 6% 3rem;
+    color: #fff;
+  }
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    font-size: 0.72rem; font-weight: 600; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--gold-lt); margin-bottom: 0.9rem;
+  }
+  .hero-eyebrow::before { content:''; width:22px; height:1px; background:var(--gold-lt); }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.9rem, 4vw, 3rem); font-weight: 700; line-height: 1.15;
+    margin-bottom: 0.75rem;
+  }
+  .hero h1 em { color: var(--gold); font-style: italic; font-weight: 400; }
+  .hero p { font-size: 0.97rem; color: rgba(255,255,255,0.78); max-width: 560px; line-height: 1.7; margin-bottom: 1.6rem; }
+  .hero-pills { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+  .hero-pill {
+    background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2);
+    color: rgba(255,255,255,0.9); font-size: 0.78rem;
+    padding: 0.32rem 0.85rem; border-radius: 20px;
+  }
+
+  /* ── TRUST BAR ── */
+  .trust-bar {
+    background: var(--brown); border-bottom: 3px solid var(--gold);
+    padding: 0.85rem 6%;
+    display: flex; gap: 2.5rem; flex-wrap: wrap; align-items: center;
+  }
+  .trust-item {
+    display: flex; align-items: center; gap: 0.5rem;
+    font-size: 0.8rem; color: rgba(255,255,255,0.85);
+  }
+  .trust-item span:first-child { font-size: 1rem; }
+
+  /* ── SECTION HEAD ── */
+  .sec-head {
+    text-align: center; padding: 3rem 6% 1.5rem;
+  }
+  .sec-head h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.6rem, 3vw, 2.4rem); font-weight: 700; color: var(--text);
+    margin-bottom: 0.5rem;
+  }
+  .sec-head h2 em { color: var(--brown); font-style: italic; }
+  .sec-head p { font-size: 0.92rem; color: var(--muted); max-width: 500px; margin: 0 auto; line-height: 1.7; }
+
+  /* ── COURSE GRID ── */
+  .course-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    padding: 0.5rem 6% 4rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  /* ── COURSE CARD ── */
+  .course-card {
+    background: var(--card);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow 0.25s, transform 0.25s;
+    position: relative;
+  }
+  .course-card:hover {
+    box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+    transform: translateY(-3px);
+  }
+  .course-card.popular {
+    border-color: var(--popular-border);
+    box-shadow: 0 4px 20px rgba(200,146,42,0.18);
+  }
+
+  /* Popular ribbon */
+  .popular-tag {
+    position: absolute; top: 14px; left: 14px; z-index: 5;
+    background: var(--brown); color: #fff;
+    font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; padding: 0.28rem 0.75rem; border-radius: 3px;
+  }
+
+  /* Thumbnail */
+  .card-thumb {
+    height: 180px;
+    display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+  }
+  .card-thumb svg { position: relative; z-index: 1; }
+
+  /* Card body */
+  .card-body {
+    padding: 1.3rem 1.4rem 0.8rem;
+    flex: 1; display: flex; flex-direction: column; gap: 0.7rem;
+  }
+
+  .level-badge {
+    display: inline-block;
+    font-size: 0.65rem; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; padding: 0.22rem 0.7rem;
+    border-radius: 3px; border: 1.5px solid; width: fit-content;
+  }
+  .level-beginner   { border-color: var(--green); color: var(--green); }
+  .level-all        { border-color: var(--gold);  color: var(--gold);  }
+  .level-advanced   { border-color: #E64A19;      color: #E64A19;      }
+  .level-masterclass{ border-color: #6B3280;      color: #6B3280;      }
+
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem; font-weight: 700; color: var(--text); line-height: 1.3;
+  }
+  .card-desc {
+    font-size: 0.83rem; color: var(--muted); line-height: 1.65;
+  }
+
+  /* Includes list */
+  .includes-label {
+    font-size: 0.65rem; font-weight: 700; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--muted); margin-top: 0.3rem;
+  }
+  .includes-list {
+    list-style: none; display: flex; flex-direction: column; gap: 0.38rem;
+  }
+  .includes-list li {
+    font-size: 0.82rem; color: var(--text);
+    display: flex; align-items: flex-start; gap: 0.5rem; line-height: 1.4;
+  }
+  .includes-list li::before {
+    content: '✓'; color: var(--green);
+    font-weight: 700; font-size: 0.78rem; flex-shrink: 0; margin-top: 1px;
+  }
+
+  /* Card footer */
+  .card-footer {
+    padding: 1rem 1.4rem 1.3rem;
+    border-top: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  }
+  .price-block {}
+  .price-main {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.7rem; font-weight: 700; color: var(--text); line-height: 1;
+  }
+  .price-note {
+    font-size: 0.72rem; color: var(--muted); margin-top: 0.15rem;
+  }
+
+  /* Razorpay button */
+  .btn-pay {
+    display: inline-flex; align-items: center; gap: 0.55rem;
+    background: var(--brown); color: #fff;
+    padding: 0.7rem 1.4rem; border-radius: 5px;
+    font-size: 0.88rem; font-weight: 600;
+    text-decoration: none; white-space: nowrap;
+    border: none; cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    font-family: 'Inter', sans-serif;
+  }
+  .btn-pay:hover { background: var(--brown-md); transform: scale(1.02); }
+  .btn-pay svg { flex-shrink: 0; }
+
+  /* Secured note */
+  .secured-note {
+    font-size: 0.7rem; color: var(--muted);
+    display: flex; align-items: center; gap: 0.3rem; margin-top: 0.3rem;
+  }
+
+  /* ── COMPARISON TABLE ── */
+  .compare-wrap {
+    padding: 1rem 6% 4rem; max-width: 1100px; margin: 0 auto;
+  }
+  .compare-wrap h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem; font-weight: 700; text-align: center;
+    margin-bottom: 1.5rem; color: var(--text);
+  }
+  .compare-wrap h3 em { color: var(--brown); font-style: italic; }
+  .compare-table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.07); }
+  .compare-table th {
+    background: var(--brown); color: #fff;
+    font-size: 0.8rem; font-weight: 600; letter-spacing: 0.06em;
+    padding: 0.9rem 1rem; text-align: left;
+  }
+  .compare-table th:first-child { width: 30%; }
+  .compare-table td {
+    padding: 0.75rem 1rem; font-size: 0.83rem; color: var(--text);
+    border-bottom: 1px solid var(--border);
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table tr:nth-child(even) td { background: #FAF6F0; }
+  .tick { color: var(--green); font-weight: 700; }
+  .cross { color: #ccc; }
+
+  /* ── FAQ ── */
+  .faq-wrap { padding: 1rem 6% 4rem; max-width: 780px; margin: 0 auto; }
+  .faq-wrap h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem; font-weight: 700; text-align: center;
+    margin-bottom: 1.5rem; color: var(--text);
+  }
+  .faq-item {
+    border: 1px solid var(--border); border-radius: 6px;
+    margin-bottom: 0.75rem; background: #fff; overflow: hidden;
+  }
+  .faq-q {
+    padding: 1rem 1.2rem; font-size: 0.9rem; font-weight: 600;
+    cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+    user-select: none; color: var(--text);
+  }
+  .faq-q::after { content: '+'; font-size: 1.2rem; color: var(--brown); flex-shrink: 0; }
+  .faq-item.open .faq-q::after { content: '−'; }
+  .faq-a {
+    display: none; padding: 0 1.2rem 1rem;
+    font-size: 0.83rem; color: var(--muted); line-height: 1.7;
+  }
+  .faq-item.open .faq-a { display: block; }
+
+  /* ── CTA STRIP ── */
+  .cta-strip {
+    background: linear-gradient(135deg, var(--brown), #5C2A10);
+    padding: 3rem 6%;
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 2rem; flex-wrap: wrap;
+  }
+  .cta-strip h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem; color: #fff; margin-bottom: 0.4rem;
+  }
+  .cta-strip h3 em { color: var(--gold); font-style: italic; font-weight: 400; }
+  .cta-strip p { font-size: 0.88rem; color: rgba(255,255,255,0.75); }
+  .btn-wa {
+    display: inline-flex; align-items: center; gap: 0.6rem;
+    background: var(--wa); color: #fff;
+    padding: 0.8rem 1.8rem; border-radius: 5px;
+    font-size: 0.9rem; font-weight: 600; text-decoration: none;
+    transition: background 0.2s; white-space: nowrap;
+  }
+  .btn-wa:hover { background: #1da851; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--brown); color: rgba(255,255,255,0.78);
+    padding: 2.5rem 6% 1.5rem;
+  }
+  .footer-grid {
+    display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 3rem;
+    padding-bottom: 1.8rem; border-bottom: 1px solid rgba(255,255,255,0.15);
+    margin-bottom: 1.2rem;
+  }
+  .footer-brand {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem; font-weight: 700; color: #fff; margin-bottom: 0.5rem;
+  }
+  .footer-desc { font-size: 0.8rem; line-height: 1.7; }
+  footer h5 {
+    font-size: 0.68rem; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; color: rgba(255,255,255,0.45); margin-bottom: 0.75rem;
+  }
+  footer ul { list-style: none; display: flex; flex-direction: column; gap: 0.45rem; }
+  footer ul a { font-size: 0.82rem; color: rgba(255,255,255,0.7); text-decoration: none; transition: color 0.2s; }
+  footer ul a:hover { color: #fff; }
+  .footer-bottom { display: flex; justify-content: space-between; font-size: 0.78rem; flex-wrap: wrap; gap: 0.5rem; }
+
+  /* ── WA FLOAT ── */
+  .wa-float {
+    position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 999;
+    width: 50px; height: 50px; border-radius: 50%;
+    background: var(--wa); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    text-decoration: none;
+    box-shadow: 0 4px 16px rgba(37,211,102,0.4);
+    transition: transform 0.2s;
+  }
+  .wa-float:hover { transform: scale(1.1); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 860px) {
+    .nav-links { display: none; flex-direction: column; position: absolute; top: 64px; left: 0; right: 0; background: #fff; padding: 1rem 5%; border-bottom: 1px solid var(--border); gap: 1rem; z-index: 200; }
+    .nav-links.open { display: flex; }
+    .hamburger { display: flex; }
+    .course-grid { grid-template-columns: 1fr; padding: 0.5rem 5% 3rem; }
+    .compare-wrap, .faq-wrap { padding: 1rem 5% 3rem; }
+    .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
+    .cta-strip { flex-direction: column; text-align: center; }
+    .trust-bar { gap: 1.2rem; }
+    .hero { padding: 2.5rem 5% 2.5rem; }
+  }
+  @media (max-width: 520px) {
+    .footer-grid { grid-template-columns: 1fr; }
+    .card-footer { flex-direction: column; align-items: flex-start; gap: 0.8rem; }
+    .btn-pay { width: 100%; justify-content: center; }
+    .compare-table { font-size: 0.76rem; }
+    .compare-table td, .compare-table th { padding: 0.6rem 0.7rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- WA Float -->
+<a class="wa-float" href="https://wa.me/919159769529?text=Hi%20Kalavasthras!%20I%20have%20a%20question%20about%20your%20courses." target="_blank" rel="noopener" title="Chat on WhatsApp">
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="https://www.kalavasthras.in">Kalavasthras</a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="https://www.kalavasthras.in">Home</a></li>
+    <li><a href="#" class="active">Courses</a></li>
+    <li><a href="shop.html">Designs</a></li>
+    <li><a href="appointment.html">Book Appointment</a></li>
+    <li><a href="https://wa.me/919159769529" class="nav-cta">WhatsApp Us</a></li>
+  </ul>
+  <button class="hamburger" onclick="document.getElementById('navLinks').classList.toggle('open')">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <p class="hero-eyebrow">Kalavasthras · Online Classes</p>
+  <h1>Learn Fabric Painting<br><em>From Master Artisans</em></h1>
+  <p>Online live classes in Tanjore-style fabric painting and hand-painted saree art. Beginner-friendly to advanced. Paint at home, learn at your pace.</p>
+  <div class="hero-pills">
+    <span class="hero-pill">🎥 Online Zoom Live Classes</span>
+    <span class="hero-pill">📜 Certificate of Completion</span>
+    <span class="hero-pill">♾ Lifetime Access to Recordings</span>
+    <span class="hero-pill">🔒 Secured Payment via Razorpay</span>
+  </div>
+</div>
+
+<!-- TRUST BAR -->
+<div class="trust-bar">
+  <div class="trust-item"><span>🎨</span> 1,200+ students trained</div>
+  <div class="trust-item"><span>⭐</span> 4.9 / 5 average rating</div>
+  <div class="trust-item"><span>👩‍🏫</span> Taught by Dayalu Krishnaswamy</div>
+  <div class="trust-item"><span>🔒</span> 100% secure payment · Razorpay</div>
+  <div class="trust-item"><span>↩️</span> 7-day refund guarantee</div>
+</div>
+
+<!-- SECTION HEAD -->
+<div class="sec-head">
+  <h2>Choose Your <em>Course</em></h2>
+  <p>All courses include live Zoom sessions, recorded access, and a personal feedback session from our instructors.</p>
+</div>
+
+<!-- COURSE GRID -->
+<div class="course-grid">
+
+  <!-- ── COURSE 1: Basic Fabric Painting ── -->
+  <div class="course-card">
+    <div class="card-thumb" style="background:linear-gradient(145deg,#E8D8C0,#D4BC98);">
+      <svg width="80" height="100" viewBox="0 0 80 100" fill="none">
+        <rect x="28" y="60" width="24" height="8" rx="2" fill="rgba(59,26,8,0.35)"/>
+        <rect x="30" y="16" width="20" height="44" rx="10" fill="rgba(59,26,8,0.22)"/>
+        <ellipse cx="40" cy="16" rx="12" ry="6" fill="rgba(59,26,8,0.18)"/>
+      </svg>
+    </div>
+    <div class="card-body">
+      <span class="level-badge level-beginner">Beginner</span>
+      <h3 class="card-title">Basic Fabric Painting</h3>
+      <p class="card-desc">Learn how to transform plain fabrics into beautiful hand-painted designs — from basics to finishing techniques.</p>
+      <p class="includes-label">What's Included</p>
+      <ul class="includes-list">
+        <li>Online zoom live classes</li>
+        <li>Step-by-step beginner-friendly tutorials</li>
+        <li>Design templates &amp; tracing methods</li>
+        <li>Color mixing &amp; brush techniques</li>
+        <li>Certificate of completion</li>
+        <li>Lifetime access for recorded sessions</li>
+      </ul>
+    </div>
+    <div class="card-footer">
+      <div class="price-block">
+        <div class="price-main">₹2999</div>
+        <div class="price-note">One-time · Lifetime access</div>
+        <div class="secured-note">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#2E7D32" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          Secured by Razorpay
+        </div>
+      </div>
+      <div>
+        <a class="btn-pay" href="https://razorpay.me/@radhakrishnansudha" target="_blank" rel="noopener" onclick="trackEnroll('Basic Fabric Painting', 2999)">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+          Enroll &amp; Pay
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── COURSE 2: Basic Tanjore (POPULAR) ── -->
+  <div class="course-card popular">
+    <span class="popular-tag">Most Popular</span>
+    <div class="card-thumb" style="background:linear-gradient(145deg,#F2C8CC,#E8A0A8);">
+      <svg width="80" height="100" viewBox="0 0 80 100" fill="none">
+        <path d="M40 20 L58 35 L52 58 L28 58 L22 35 Z" fill="rgba(255,255,255,0.5)" stroke="rgba(59,26,8,0.25)" stroke-width="1.2"/>
+        <circle cx="40" cy="40" r="8" fill="rgba(59,26,8,0.18)" stroke="rgba(59,26,8,0.3)" stroke-width="1"/>
+      </svg>
+    </div>
+    <div class="card-body">
+      <span class="level-badge level-all">All Levels</span>
+      <h3 class="card-title">Basic Tanjore Style Fabric Painting Course</h3>
+      <p class="card-desc">Learn the beauty of traditional Tanjore-style art on fabric — simplified for beginners. Create elegant, rich-looking designs without prior experience.</p>
+      <p class="includes-label">What's Included</p>
+      <ul class="includes-list">
+        <li>Online zoom live classes</li>
+        <li>Step-by-step beginner-friendly guidance</li>
+        <li>Basic Tanjore design patterns</li>
+        <li>Color filling &amp; outlining techniques</li>
+        <li>Fabric &amp; paint selection guide</li>
+        <li>Lifetime access</li>
+      </ul>
+    </div>
+    <div class="card-footer">
+      <div class="price-block">
+        <div class="price-main">₹2999</div>
+        <div class="price-note">One-time · Lifetime access</div>
+        <div class="secured-note">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#2E7D32" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          Secured by Razorpay
+        </div>
+      </div>
+      <div>
+        <a class="btn-pay" href="https://razorpay.me/@radhakrishnansudha" target="_blank" rel="noopener" onclick="trackEnroll('Basic Tanjore Style Fabric Painting', 2999)">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+          Enroll &amp; Pay
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── COURSE 3: Advanced Fabric Painting ── -->
+  <div class="course-card">
+    <div class="card-thumb" style="background:linear-gradient(145deg,#C8C0E0,#B0A0D0);">
+      <svg width="80" height="100" viewBox="0 0 80 100" fill="none">
+        <circle cx="40" cy="45" r="22" fill="rgba(255,255,255,0.3)" stroke="rgba(59,26,8,0.2)" stroke-width="1.2"/>
+        <circle cx="40" cy="45" r="8" fill="rgba(59,26,8,0.2)" stroke="rgba(59,26,8,0.3)" stroke-width="1"/>
+      </svg>
+    </div>
+    <div class="card-body">
+      <span class="level-badge level-advanced">Advanced</span>
+      <h3 class="card-title">Advanced Fabric Painting Course</h3>
+      <p class="card-desc">Upgrade your skills and create professional-level fabric paintings with advanced techniques, shading, and modern designs.</p>
+      <p class="includes-label">What's Included</p>
+      <ul class="includes-list">
+        <li>Online zoom live classes</li>
+        <li>Material sourcing guide PDF</li>
+        <li>Advanced brush &amp; detailing techniques</li>
+        <li>Realistic shading &amp; blending methods</li>
+        <li>Fabric finishing &amp; durability techniques</li>
+        <li>Lifetime access</li>
+      </ul>
+    </div>
+    <div class="card-footer">
+      <div class="price-block">
+        <div class="price-main">₹4999</div>
+        <div class="price-note">One-time · Lifetime access</div>
+        <div class="secured-note">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#2E7D32" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          Secured by Razorpay
+        </div>
+      </div>
+      <div>
+        <a class="btn-pay" href="https://razorpay.me/@radhakrishnansudha" target="_blank" rel="noopener" onclick="trackEnroll('Advanced Fabric Painting', 4999)">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+          Enroll &amp; Pay
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── COURSE 4: Advanced Tanjore ── -->
+  <div class="course-card">
+    <div class="card-thumb" style="background:linear-gradient(145deg,#C8D8B8,#A8C090);">
+      <svg width="80" height="100" viewBox="0 0 80 100" fill="none">
+        <rect x="22" y="30" width="16" height="28" rx="3" fill="rgba(59,26,8,0.22)" stroke="rgba(59,26,8,0.2)" stroke-width="1"/>
+        <rect x="42" y="44" width="16" height="14" rx="3" fill="rgba(59,26,8,0.18)" stroke="rgba(59,26,8,0.2)" stroke-width="1"/>
+      </svg>
+    </div>
+    <div class="card-body">
+      <span class="level-badge level-advanced">Advanced</span>
+      <h3 class="card-title">Advanced Tanjore Style Fabric Painting Course</h3>
+      <p class="card-desc">Master the art of rich, royal Tanjore-style fabric painting with intricate detailing, depth effects, and premium finishing techniques.</p>
+      <p class="includes-label">What's Included</p>
+      <ul class="includes-list">
+        <li>Online zoom live classes</li>
+        <li>Advanced Tanjore design techniques</li>
+        <li>Detailing, layering &amp; depth creation</li>
+        <li>Gold effect &amp; highlighting methods</li>
+        <li>Complex traditional compositions</li>
+        <li>Lifetime access</li>
+      </ul>
+    </div>
+    <div class="card-footer">
+      <div class="price-block">
+        <div class="price-main">₹9999</div>
+        <div class="price-note">One-time · Lifetime access</div>
+        <div class="secured-note">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#2E7D32" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          Secured by Razorpay
+        </div>
+      </div>
+      <div>
+        <a class="btn-pay" href="https://razorpay.me/@radhakrishnansudha" target="_blank" rel="noopener" onclick="trackEnroll('Advanced Tanjore Style Fabric Painting', 9999)">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+          Enroll &amp; Pay
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── COURSE 5: Kerala Mural ── -->
+  <div class="course-card">
+    <div class="card-thumb" style="background:linear-gradient(145deg,#C0D8C8,#98BCA8);">
+      <svg width="90" height="110" viewBox="0 0 90 110" fill="none">
+        <path d="M45 20 Q62 30 68 52 Q68 78 45 92 Q22 78 22 52 Q28 30 45 20Z" fill="rgba(255,255,255,0.3)" stroke="rgba(59,26,8,0.22)" stroke-width="1.2"/>
+        <circle cx="45" cy="55" r="12" fill="rgba(59,26,8,0.18)" stroke="rgba(59,26,8,0.25)" stroke-width="1"/>
+        <path d="M36 42 L45 48 L54 42" stroke="rgba(59,26,8,0.3)" stroke-width="1" fill="none"/>
+      </svg>
+    </div>
+    <div class="card-body">
+      <span class="level-badge level-all">All Levels</span>
+      <h3 class="card-title">Kerala Mural Style Fabric Painting</h3>
+      <p class="card-desc">Learn the bold, ochre-and-green aesthetics of Kerala temple murals — applied to sarees, blouses and dress material.</p>
+      <p class="includes-label">What's Included</p>
+      <ul class="includes-list">
+        <li>Online zoom live classes</li>
+        <li>Kerala mural motif library PDF</li>
+        <li>Earthy pigment mixing guide</li>
+        <li>Bold outline &amp; fill techniques</li>
+        <li>Project: complete pallu design</li>
+        <li>Certificate of completion</li>
+        <li>Lifetime access</li>
+      </ul>
+    </div>
+    <div class="card-footer">
+      <div class="price-block">
+        <div class="price-main">₹3999</div>
+        <div class="price-note">One-time · Lifetime access</div>
+        <div class="secured-note">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#2E7D32" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          Secured by Razorpay
+        </div>
+      </div>
+      <div>
+        <a class="btn-pay" href="https://razorpay.me/@radhakrishnansudha" target="_blank" rel="noopener" onclick="trackEnroll('Kerala Mural Style Fabric Painting', 3999)">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+          Enroll &amp; Pay
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── COURSE 6: Complete Masterclass ── -->
+  <div class="course-card popular">
+    <span class="popular-tag" style="background:#6B3280;">Masterclass</span>
+    <div class="card-thumb" style="background:linear-gradient(145deg,#F0D8A0,#E0B860);">
+      <svg width="90" height="110" viewBox="0 0 90 110" fill="none">
+        <polygon points="45,18 58,35 75,35 63,47 68,64 45,52 22,64 27,47 15,35 32,35" fill="rgba(59,26,8,0.2)" stroke="rgba(59,26,8,0.35)" stroke-width="1.2"/>
+        <circle cx="45" cy="52" r="8" fill="rgba(59,26,8,0.25)"/>
+      </svg>
+    </div>
+    <div class="card-body">
+      <span class="level-badge level-masterclass">Masterclass</span>
+      <h3 class="card-title">Complete Saree Artist Certification Program</h3>
+      <p class="card-desc">Our flagship 3-month program — covers Tanjore fabric art, Kerala mural, blouse design, and advanced finishing. Earn a recognised artist certification.</p>
+      <p class="includes-label">What's Included</p>
+      <ul class="includes-list">
+        <li>All modules: Tanjore + Mural + Blouse</li>
+        <li>30+ live Zoom sessions</li>
+        <li>1-on-1 feedback sessions (3 slots)</li>
+        <li>Premium material sourcing guide</li>
+        <li>Gold effect &amp; jewel-tone techniques</li>
+        <li>Artist portfolio review</li>
+        <li>Recognised certificate of mastery</li>
+        <li>Lifetime access to all recordings</li>
+      </ul>
+    </div>
+    <div class="card-footer">
+      <div class="price-block">
+        <div class="price-main">₹18,000</div>
+        <div class="price-note">One-time · Lifetime access · 3 months</div>
+        <div class="secured-note">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#2E7D32" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          Secured by Razorpay
+        </div>
+      </div>
+      <div>
+        <a class="btn-pay" href="https://razorpay.me/@radhakrishnansudha" target="_blank" rel="noopener" onclick="trackEnroll('Complete Saree Artist Certification', 18000)">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+          Enroll &amp; Pay
+        </a>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /course-grid -->
+
+<!-- COMPARISON TABLE -->
+<div class="compare-wrap">
+  <h3>Compare <em>All Courses</em></h3>
+  <table class="compare-table">
+    <thead>
+      <tr>
+        <th>Feature</th>
+        <th>Basic (₹2,999)</th>
+        <th>Advanced (₹4,999–₹9,999)</th>
+        <th>Masterclass (₹18,000)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Live Zoom classes</td>
+        <td class="tick">✓</td>
+        <td class="tick">✓</td>
+        <td class="tick">✓</td>
+      </tr>
+      <tr>
+        <td>Recorded session access</td>
+        <td class="tick">✓ Lifetime</td>
+        <td class="tick">✓ Lifetime</td>
+        <td class="tick">✓ Lifetime</td>
+      </tr>
+      <tr>
+        <td>Certificate of completion</td>
+        <td class="tick">✓</td>
+        <td class="tick">✓</td>
+        <td class="tick">✓ Artist Certificate</td>
+      </tr>
+      <tr>
+        <td>Design templates PDF</td>
+        <td class="tick">✓ Basic</td>
+        <td class="tick">✓ Advanced</td>
+        <td class="tick">✓ Full library</td>
+      </tr>
+      <tr>
+        <td>Material sourcing guide</td>
+        <td class="cross">✗</td>
+        <td class="tick">✓</td>
+        <td class="tick">✓ Premium</td>
+      </tr>
+      <tr>
+        <td>1-on-1 feedback session</td>
+        <td class="cross">✗</td>
+        <td class="cross">✗</td>
+        <td class="tick">✓ 3 sessions</td>
+      </tr>
+      <tr>
+        <td>Tanjore style module</td>
+        <td class="cross">✗</td>
+        <td class="tick">✓</td>
+        <td class="tick">✓</td>
+      </tr>
+      <tr>
+        <td>Kerala mural module</td>
+        <td class="cross">✗</td>
+        <td class="tick">✓ (mural course)</td>
+        <td class="tick">✓</td>
+      </tr>
+      <tr>
+        <td>Gold effect techniques</td>
+        <td class="cross">✗</td>
+        <td class="tick">✓ (Tanjore Adv.)</td>
+        <td class="tick">✓</td>
+      </tr>
+      <tr>
+        <td>Portfolio review</td>
+        <td class="cross">✗</td>
+        <td class="cross">✗</td>
+        <td class="tick">✓</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- FAQ -->
+<div class="faq-wrap">
+  <h3>Frequently Asked Questions</h3>
+
+  <div class="faq-item">
+    <div class="faq-q" onclick="toggleFaq(this)">Do I need any prior painting experience?</div>
+    <div class="faq-a">No experience needed for Beginner and Basic courses. They are designed from scratch. For Advanced courses, basic fabric painting knowledge is helpful but not mandatory.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q" onclick="toggleFaq(this)">How does payment work? Is it secure?</div>
+    <div class="faq-a">All payments are processed via <strong>Razorpay</strong> — India's most trusted payment gateway. You can pay using UPI, credit/debit card, net banking, or EMI. Your payment is fully encrypted and secure.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q" onclick="toggleFaq(this)">What materials do I need to buy?</div>
+    <div class="faq-a">A basic material list is shared after enrollment. For beginners, a starter kit costing ₹500–₹800 is sufficient. Advanced courses include a material sourcing PDF with exact brands and sources.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q" onclick="toggleFaq(this)">Are the classes live or recorded?</div>
+    <div class="faq-a">Classes are conducted live on Zoom. All sessions are recorded and accessible to you lifetime, so you never miss anything if you can't attend live.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q" onclick="toggleFaq(this)">What is your refund policy?</div>
+    <div class="faq-a">We offer a 7-day full refund if you're not satisfied after attending the first session. Refund requests after 7 days are reviewed on a case-by-case basis. Contact us on WhatsApp to initiate a refund.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q" onclick="toggleFaq(this)">Can I enroll if I'm outside India?</div>
+    <div class="faq-a">Yes! Students from the US, UK, UAE, Singapore, Canada, and Malaysia have enrolled. Classes are conducted IST and recordings are available so international students can watch at their own time.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q" onclick="toggleFaq(this)">When do the next batches start?</div>
+    <div class="faq-a">New batches start every month. After payment, our team will WhatsApp you with the next available batch dates and Zoom link. You can also <a href="appointment.html" style="color:var(--brown);font-weight:600;">book a free consultation</a> to ask before enrolling.</div>
+  </div>
+</div>
+
+<!-- CTA STRIP -->
+<div class="cta-strip">
+  <div>
+    <h3>Not sure which <em>course to pick?</em></h3>
+    <p>Book a free 15-minute WhatsApp call — we'll help you choose the right course based on your goals and experience level.</p>
+  </div>
+  <div style="display:flex;gap:1rem;flex-wrap:wrap;">
+    <a class="btn-wa" href="https://wa.me/919159769529?text=Hi%20Kalavasthras!%20I%20want%20to%20know%20which%20course%20is%20right%20for%20me." target="_blank" rel="noopener">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Ask on WhatsApp
+    </a>
+    <a href="appointment.html" style="display:inline-flex;align-items:center;gap:0.6rem;background:rgba(255,255,255,0.15);color:#fff;padding:0.8rem 1.8rem;border-radius:5px;font-size:0.9rem;font-weight:600;text-decoration:none;border:1px solid rgba(255,255,255,0.3);transition:background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.22)'" onmouseout="this.style.background='rgba(255,255,255,0.15)'">
+      📅 Book Free Consultation
+    </a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand">Kalavasthras</div>
+      <p class="footer-desc">Online live classes in Tanjore fabric painting, Kerala mural art, and hand-painted saree design. Learn from master artisans.</p>
+    </div>
+    <div>
+      <h5>Courses</h5>
+      <ul>
+        <li><a href="#" onclick="scrollTo(0,0)">Basic Fabric Painting · ₹2,999</a></li>
+        <li><a href="#" onclick="scrollTo(0,0)">Basic Tanjore Style · ₹2,999</a></li>
+        <li><a href="#" onclick="scrollTo(0,0)">Advanced Fabric · ₹4,999</a></li>
+        <li><a href="#" onclick="scrollTo(0,0)">Advanced Tanjore · ₹9,999</a></li>
+        <li><a href="#" onclick="scrollTo(0,0)">Kerala Mural · ₹3,999</a></li>
+        <li><a href="#" onclick="scrollTo(0,0)">Masterclass · ₹18,000</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Help</h5>
+      <ul>
+        <li><a href="https://wa.me/919159769529">WhatsApp Support</a></li>
+        <li><a href="appointment.html">Book Consultation</a></li>
+        <li><a href="mailto:namaste@kalavasthras.in">namaste@kalavasthras.in</a></li>
+        <li><a href="https://razorpay.me/@radhakrishnansudha" target="_blank">Pay via Razorpay</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 Kalavasthras · Dayalu Designs. All rights reserved.</span>
+    <span>🔒 Payments secured by Razorpay · 7-day refund guarantee</span>
+  </div>
+</footer>
+
+<script>
+  // FAQ accordion
+  function toggleFaq(el) {
+    const item = el.parentElement;
+    const wasOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!wasOpen) item.classList.add('open');
+  }
+
+  // Track enroll click (optional: extend with analytics)
+  function trackEnroll(courseName, price) {
+    console.log(`Enroll clicked: ${courseName} — ₹${price}`);
+    // All clicks go to Razorpay payment link directly
+  }
+</script>
+</body>
+</html>
