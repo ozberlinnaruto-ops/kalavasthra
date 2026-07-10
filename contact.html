@@ -238,53 +238,23 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </a>
 
 <script>
+const formData = new FormData();
+formData.append("name", document.getElementById("name").value);
+formData.append("phone", document.getElementById("phone").value);
+formData.append("email", document.getElementById("email").value);
+formData.append("subject", document.getElementById("subject").value);
+formData.append("message", document.getElementById("message").value);
 
-function toggleNav() {
-  document.getElementById('navLinks').classList.toggle('open');
-}
-
-function submitForm(e) {
-
-  e.preventDefault();
-
-  const data = {
-    name: document.getElementById("name").value,
-    phone: document.getElementById("phone").value,
-    email: document.getElementById("email").value,
-    subject: document.getElementById("subject").value,
-    message: document.getElementById("message").value
-  };
-
-  fetch("https://script.google.com/macros/s/AKfycbzo9--MgEMbUrr5yoeKY7OzZku8EpwlJiJY0NZpQR9GhmsvAeCBM8hQVgvCLXJhjQ4rYQ/exec", {
-
-    method: "POST",
-
-    headers: {
-      "Content-Type": "application/json"
-    },
-
-    body: JSON.stringify(data)
-
-  })
-
-  .then(response => response.json())
-
-  .then(result => {
-
-    document.getElementById('contactForm').style.display = 'none';
-    document.getElementById('formSuccess').style.display = 'block';
-
-  })
-
-  .catch(error => {
-
-    alert("Error sending form");
-    console.log(error);
-
-  });
-
-}
-
+fetch("YOUR_APPS_SCRIPT_URL", {
+  method: "POST",
+  body: formData
+})
+.then(response => response.text())
+.then(result => {
+  document.getElementById("contactForm").reset();
+  document.getElementById("formSuccess").style.display = "block";
+})
+.catch(err => console.error(err));
 </script>
 </body>
 </html>
