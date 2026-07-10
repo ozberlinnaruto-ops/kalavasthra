@@ -201,68 +201,6 @@ Send Message
 <div id="formSuccess" class="form-success"></div>
 
 </div>
-  <script>
-
-const SCRIPT_URL="https://script.google.com/macros/s/AKfycbx5qsgU3mGtf1RxkXpY1sIgMzV6pfgVr7uw9V6fyORNu5litZbjfLxrhTXgH999YSe--g/exec";
-                  
-document
-.getElementById("contactForm")
-.addEventListener("submit",submitForm);
-
-function submitForm(e){
-
-e.preventDefault();
-
-const fd=new FormData();
-
-fd.append("name",
-document.getElementById("name").value);
-
-fd.append("phone",
-document.getElementById("phone").value);
-
-fd.append("email",
-document.getElementById("email").value);
-
-fd.append("subject",
-document.getElementById("subject").value);
-
-fd.append("message",
-document.getElementById("message").value);
-
-fetch(SCRIPT_URL,{
-
-method:"POST",
-
-body:fd
-
-})
-
-.then(r=>r.text())
-
-.then(()=>{
-
-document
-.getElementById("contactForm")
-.reset();
-
-document
-.getElementById("formSuccess")
-.innerHTML="✅ Thank you! We received your enquiry.";
-
-})
-
-.catch(err=>{
-
-alert(err);
-
-console.log(err);
-
-});
-
-}
-
-</script>
 
 <!-- FAQ -->
 <section class="section faq-mini">
