@@ -251,7 +251,7 @@ Send Message
 <script>
 
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbx5qsgU3mGtf1RxkXpY1sIgMzV6pfgVr7uw9V6fyORNu5litZbjfLxrhTXgH999YSe--g/exec";
-
+                  
 document
 .getElementById("contactForm")
 .addEventListener("submit",submitForm);
@@ -277,36 +277,28 @@ document.getElementById("subject").value);
 fd.append("message",
 document.getElementById("message").value);
 
-fetch(SCRIPT_URL,{
+fetch(SCRIPT_URL, {
+    method: "POST",
+    body: fd
+})
+.then(async response => {
 
-method:"POST",
+    const text = await response.text();
 
-body:fd
+    console.log("Status:", response.status);
+    console.log("Response:", text);
+
+    if (!response.ok) {
+        throw new Error(text);
+    }
+
+    window.location.href = "thankyou.html";
 
 })
-
-.then(r=>r.text())
-
-.then(()=>{
-
-document
-.getElementById("contactForm")
-.reset();
-
-document
-.getElementById("formSuccess")
-.innerHTML="✅ Thank you! We received your enquiry.";
-
-})
-
-.catch(err=>{
-
-alert(err);
-
-console.log(err);
-
+.catch(error => {
+    console.error(error);
+    alert(error);
 });
-
 }
 
 </script>
