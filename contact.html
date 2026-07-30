@@ -265,7 +265,11 @@ Send Message
 </button>
 </form>
 <div id="formSuccess" class="form-success"></div>
+fbq('track', 'Lead');
 
+gtag('event', 'conversion', {
+  'send_to': 'AW-17309156200/HTDDCOvtnq4cEOiG071A'
+});
 </div> <!-- contact-form-card -->
 
 </div> <!-- contact-layout -->
@@ -352,6 +356,13 @@ function submitForm(e) {
     document.getElementById("contactForm").reset();
 
     document.getElementById("thankYouPopup").style.display = "block";
+  
+    // GTM Event
+    dataLayer.push({
+        event: "form_submit_success",
+        form_name: "contact_form",
+        course: document.getElementById("subject").value
+    });
 
     btn.textContent = "Send Message";
     btn.disabled = false;
