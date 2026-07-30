@@ -119,6 +119,29 @@ gtag('event', 'conversion', {
   font-size: 28px;
   cursor: pointer;
 }
+    @media (max-width: 768px) {
+
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 70px;
+    left: 0;
+    width: 100%;
+    background: #fff;
+    padding: 20px 0;
+    z-index: 999;
+  }
+
+  .nav-links.active {
+    display: flex;
+  }
+
+  .nav-hamburger {
+    display: flex;
+    cursor: pointer;
+  }
+}
   </style>
 </head>
 <body>
@@ -354,6 +377,11 @@ window.addEventListener("click", (e) => {
         popup.style.display = "none";
     }
 });
+</script>
+  <script>
+function toggleNav() {
+    document.getElementById("navLinks").classList.toggle("active");
+}
 </script>
 </body>
 </html>
