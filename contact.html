@@ -85,6 +85,40 @@ gtag('event', 'conversion', {
     .faq-a { font-size: 13px; color: var(--text-muted); line-height: 1.75; }
 
     @media (max-width: 800px) { .contact-layout { grid-template-columns: 1fr; padding: 40px 24px; } .form-row { grid-template-columns: 1fr; } .faq-grid { grid-template-columns: 1fr; } }
+ .popup {
+  display: none;
+  position: fixed;
+  z-index: 9999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+}
+
+.popup-content {
+  background: #fff;
+  width: 400px;
+  max-width: 90%;
+  margin: 15% auto;
+  padding: 30px;
+  border-radius: 8px;
+  text-align: center;
+  position: relative;
+}
+
+.popup-content h2 {
+  color: #8B4513;
+  margin-bottom: 10px;
+}
+
+.close-popup {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 28px;
+  cursor: pointer;
+}
   </style>
 </head>
 <body>
@@ -164,7 +198,7 @@ gtag('event', 'conversion', {
   <!-- FORM -->
   <div class="contact-form-card">
     <div class="form-title">Send a Message</div>
-    <div class="form-sub">Fill in the form and we'll get back to you within 24 hours.</div>
+    <div class="form-sub">Fill in the form and we'll get back to you.</div>
 <form id="contactForm">
 
 <div class="form-row">
@@ -212,6 +246,20 @@ Send Message
 </div> <!-- contact-form-card -->
 
 </div> <!-- contact-layout -->
+
+  <div id="thankYouPopup" class="popup">
+  <div class="popup-content">
+    <span class="close-popup">&times;</span>
+
+    <h2>Thank You!</h2>
+
+    <p>
+      Your message has been submitted successfully.
+      Our team will contact you shortly.
+    </p>
+
+  </div>
+</div>
 
 <!-- FAQ -->
 <section class="section faq-mini">
@@ -277,14 +325,35 @@ function submitForm(e) {
     body:   fd
   })
   .then(() => {
-    window.location.href = "thankyou.html";
-  })
+
+    document.getElementById("contactForm").reset();
+
+    document.getElementById("thankYouPopup").style.display = "block";
+
+    btn.textContent = "Send Message";
+    btn.disabled = false;
+
+})
   .catch(() => {
     btn.textContent = "Send Message";
     btn.disabled = false;
     alert("Something went wrong. Please WhatsApp us directly.");
   });
 }
+</script>
+  <script>
+const popup = document.getElementById("thankYouPopup");
+const closePopup = document.querySelector(".close-popup");
+
+closePopup.addEventListener("click", () => {
+    popup.style.display = "none";
+});
+
+window.addEventListener("click", (e) => {
+    if (e.target === popup) {
+        popup.style.display = "none";
+    }
+});
 </script>
 </body>
 </html>
